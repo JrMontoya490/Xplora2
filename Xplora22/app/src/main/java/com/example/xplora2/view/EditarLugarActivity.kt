@@ -1,5 +1,6 @@
 package com.example.xplora2.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -37,14 +38,12 @@ class EditarLugarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editar_lugar)
 
-        // Obtener ID del lugar
         lugarId = intent.getStringExtra("LUGAR_ID") ?: run {
             Toast.makeText(this, "ID del lugar no recibido", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
 
-        // Inicializar inputs
         nombreEditText = findViewById(R.id.nombreLugarEditText)
         paisEditText = findViewById(R.id.paisLugarEditText)
         ciudadEditText = findViewById(R.id.ciudadLugarEditText)
@@ -85,6 +84,7 @@ class EditarLugarActivity : AppCompatActivity() {
                     override fun onResponse(call: Call<Lugar>, response: Response<Lugar>) {
                         if (response.isSuccessful) {
                             Toast.makeText(this@EditarLugarActivity, "Lugar actualizado", Toast.LENGTH_SHORT).show()
+                            setResult(RESULT_OK, Intent().putExtra("HUBO_CAMBIOS", true))
                             finish()
                         } else {
                             Toast.makeText(this@EditarLugarActivity, "Error al actualizar", Toast.LENGTH_SHORT).show()
@@ -103,6 +103,7 @@ class EditarLugarActivity : AppCompatActivity() {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
                             Toast.makeText(this@EditarLugarActivity, "Lugar eliminado", Toast.LENGTH_SHORT).show()
+                            setResult(RESULT_OK, Intent().putExtra("HUBO_CAMBIOS", true))
                             finish()
                         } else {
                             Toast.makeText(this@EditarLugarActivity, "Error al eliminar", Toast.LENGTH_SHORT).show()

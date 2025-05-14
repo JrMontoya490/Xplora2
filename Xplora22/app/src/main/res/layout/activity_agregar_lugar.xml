@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AgregarLugarActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Nombre -->
+        <EditText
+            android:id="@+id/nombreLugarEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Nombre del Lugar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- País -->
+        <EditText
+            android:id="@+id/paisLugarEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="País"
+            app:layout_constraintTop_toBottomOf="@id/nombreLugarEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Ciudad -->
+        <EditText
+            android:id="@+id/ciudadLugarEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Ciudad"
+            app:layout_constraintTop_toBottomOf="@id/paisLugarEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Descripción -->
+        <EditText
+            android:id="@+id/descripcionLugarEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Descripción"
+            app:layout_constraintTop_toBottomOf="@id/ciudadLugarEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Imagen URL -->
+        <EditText
+            android:id="@+id/imagenUrlEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="URL de la Imagen"
+            app:layout_constraintTop_toBottomOf="@id/descripcionLugarEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Fecha fundación -->
+        <EditText
+            android:id="@+id/fechaFundacionEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Fecha de Fundación (YYYY-MM-DD)"
+            app:layout_constraintTop_toBottomOf="@id/imagenUrlEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Tipo de lugar -->
+        <EditText
+            android:id="@+id/tipoLugarEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Tipo de Lugar"
+            app:layout_constraintTop_toBottomOf="@id/fechaFundacionEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Idiomas -->
+        <EditText
+            android:id="@+id/idiomasEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Idiomas (separados por coma)"
+            app:layout_constraintTop_toBottomOf="@id/tipoLugarEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Etiquetas -->
+        <EditText
+            android:id="@+id/etiquetasEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Etiquetas (separadas por coma)"
+            app:layout_constraintTop_toBottomOf="@id/idiomasEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Latitud -->
+        <EditText
+            android:id="@+id/latitudEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Latitud"
+            android:inputType="numberDecimal"
+            app:layout_constraintTop_toBottomOf="@id/etiquetasEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Longitud -->
+        <EditText
+            android:id="@+id/longitudEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Longitud"
+            android:inputType="numberDecimal"
+            app:layout_constraintTop_toBottomOf="@id/latitudEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Botón Guardar -->
+        <Button
+            android:id="@+id/btnGuardarLugar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guardar"
+            app:layout_constraintTop_toBottomOf="@id/longitudEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

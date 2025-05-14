@@ -21,11 +21,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDnPbjA2pjSpNfB8SfAkiYZt3Yf9FFK244" />
 
-        <activity android:name=".EditarLugarActivity" />
-        <activity android:name=".AgregarLugarActivity" />
-        <activity android:name=".DetalleActivity" />
+        <activity android:name=".view.EditarLugarActivity" />
+        <activity android:name=".view.AgregarLugarActivity" />
+        <activity android:name=".view.DetalleActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

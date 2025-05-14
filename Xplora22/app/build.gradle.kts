@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-android")
     id("org.jetbrains.kotlin.kapt")
-
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -51,23 +51,32 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // Retrofit para consumo de API
+    // Firebase Auth
+    implementation("com.google.firebase:firebase-auth:23.2.0")
+
+    // Google Sign-In (para login con cuenta Google)
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
+
+    // Retrofit (API REST)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    // Glide para carga de imágenes
-    implementation("com.github.bumptech.glide:glide:4.12.0")
+    // Glide (imágenes)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     kapt("com.github.bumptech.glide:compiler:4.12.0")
 
     // RecyclerView
-    implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
 
-    //Maps
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    // Maps
+    implementation("com.google.android.gms:play-services-maps:19.2.0")
 
-    //Gson
-    implementation("com.google.code.gson:gson:2.10.1")
+    // Gson
+    implementation("com.google.code.gson:gson:2.11.0")
 
-    //picasso
+    // Picasso
     implementation("com.squareup.picasso:picasso:2.71828")
+    
 }
+
+

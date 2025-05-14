@@ -16,6 +16,9 @@ import com.example.xplora2.R
 import com.example.xplora2.adapter.LugarAdapter
 import com.example.xplora2.controller.ApiClient
 import com.example.xplora2.model.Lugar
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         searchView = findViewById(R.id.searchView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Configurar el adaptador
+        // Configurar adaptador
         lugarAdapter = LugarAdapter(lugaresFiltrados) { lugar ->
             if (lugar._id.isNotEmpty()) {
                 val intent = Intent(this@MainActivity, DetalleActivity::class.java)
@@ -49,24 +52,42 @@ class MainActivity : AppCompatActivity() {
         }
         recyclerView.adapter = lugarAdapter
 
-        // Configurar el buscador
+        // Buscador
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = false
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 filtrarLugares(newText)
                 return true
             }
         })
 
-        // Botón para agregar lugar
+        // Botón Agregar Lugar
         val btnAgregarLugar = findViewById<Button>(R.id.btnAgregarLugar)
         btnAgregarLugar.setOnClickListener {
             val intent = Intent(this, AgregarLugarActivity::class.java)
             startActivity(intent)
         }
 
-        // Inicializar el launcher
+        // Botón Cerrar Sesión
+        val btnCerrarSesion = findViewById<Button>(R.id.btnCerrarSesion)
+        btnCerrarSesion.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+
+            val googleSignInClient = GoogleSignIn.getClient(this,
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build()
+            )
+            googleSignInClient.signOut().addOnCompleteListener {
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            }
+        }
+
+        // Launcher para detalles
         detalleLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val huboCambios = result.data?.getBooleanExtra("HUBO_CAMBIOS", false) ?: false
@@ -76,7 +97,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Cargar lugares
         cargarLugaresDesdeAPI()
     }
 
@@ -119,5 +139,4 @@ class MainActivity : AppCompatActivity() {
         }
         lugarAdapter.notifyDataSetChanged()
     }
-
 }

@@ -8,8 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.xplora2.view.AgregarLugarActivity
-import com.example.xplora2.view.DetalleActivity
+import androidx.appcompat.widget.SearchView
 import com.example.xplora2.R
 import com.example.xplora2.adapter.LugarAdapter
 import com.example.xplora2.controller.ApiClient
@@ -22,7 +21,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var lugarAdapter: LugarAdapter
+    private lateinit var searchView: SearchView
     private val lugares = mutableListOf<Lugar>()
+    private val lugaresFiltrados = mutableListOf<Lugar>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +32,11 @@ class MainActivity : AppCompatActivity() {
         Log.d("MainActivity", "onCreate llamado")
 
         recyclerView = findViewById(R.id.rvLugares)
+        searchView = findViewById(R.id.searchView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Adapter con onClick que pasa el ID del lugar a DetalleActivity
-        lugarAdapter = LugarAdapter(lugares) { lugar ->
-            Log.d("MAIN", "Lugar seleccionado: ${lugar.nombre}, ID: ${lugar._id}") // Verifica el ID
+        lugarAdapter = LugarAdapter(lugaresFiltrados) { lugar ->
+            Log.d("MAIN", "Lugar seleccionado: ${lugar.nombre}, ID: ${lugar._id}")
             if (lugar._id.isNotEmpty()) {
                 val intent = Intent(this@MainActivity, DetalleActivity::class.java)
                 intent.putExtra("LUGAR_ID", lugar._id)
@@ -44,12 +45,22 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "ID del lugar no disponible", Toast.LENGTH_SHORT).show()
             }
         }
+
         recyclerView.adapter = lugarAdapter
 
-        // Cargar lugares desde la API
+        // Buscar texto
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = false
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filtrarLugares(newText)
+                return true
+            }
+        })
+
+        // Cargar desde API
         cargarLugaresDesdeAPI()
 
-        // Botón para agregar nuevo lugar
         val btnAgregarLugar = findViewById<Button>(R.id.btnAgregarLugar)
         btnAgregarLugar.setOnClickListener {
             val intent = Intent(this, AgregarLugarActivity::class.java)
@@ -65,8 +76,9 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body()?.let { lugaresApi ->
                         Log.d("MainActivity", "Cuerpo de la respuesta no nulo. Cantidad de lugares: ${lugaresApi.size}")
-                        lugarAdapter.actualizarLugares(lugaresApi)
-                        Log.d("MainActivity", "actualizarLugares llamado")
+                        lugares.clear()
+                        lugares.addAll(lugaresApi)
+                        filtrarLugares("") // Mostrar todos al inicio
                     } ?: run {
                         Log.w("MainActivity", "Cuerpo de la respuesta nulo.")
                     }
@@ -80,6 +92,25 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, "Error al cargar lugares", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun filtrarLugares(texto: String?) {
+        lugaresFiltrados.clear()
+
+        if (texto.isNullOrEmpty()) {
+            lugaresFiltrados.addAll(lugares)
+        } else {
+            val textoFiltrado = texto.lowercase()
+            lugaresFiltrados.addAll(
+                lugares.filter {
+                    it.nombre.lowercase().contains(textoFiltrado) ||
+                            it.ciudad.lowercase().contains(textoFiltrado) ||
+                            it.pais.lowercase().contains(textoFiltrado)
+                }
+            )
+        }
+
+        lugarAdapter.notifyDataSetChanged()
     }
 
     override fun onResume() {

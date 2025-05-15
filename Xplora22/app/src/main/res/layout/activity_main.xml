@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".view.MainActivity">
 
-    <!-- Barra de búsqueda -->
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="0dp"
@@ -18,40 +17,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvLugares"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="8dp"
         app:layout_constraintTop_toBottomOf="@id/searchView"
-        app:layout_constraintBottom_toTopOf="@+id/btnAgregarLugar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_lugar" />
+        android:layout_marginBottom="72dp" tools:listitem="@layout/item_lugar" />
 
-    <!-- Botón Agregar Lugar -->
-    <Button
-        android:id="@+id/btnAgregarLugar"
-        android:layout_width="0dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAgregarLugar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Agregar Lugar"
         android:layout_margin="16dp"
-        app:layout_constraintTop_toBottomOf="@id/rvLugares"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnCerrarSesion" />
+        app:srcCompat="@drawable/ic_add" app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Botón Cerrar Sesión -->
-    <Button
-        android:id="@+id/btnCerrarSesion"
-        android:layout_width="0dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabCerrarSesion"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cerrar Sesión"
         android:layout_margin="16dp"
-        app:layout_constraintTop_toBottomOf="@id/rvLugares"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btnAgregarLugar"
+        app:srcCompat="@drawable/ic_logout" app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

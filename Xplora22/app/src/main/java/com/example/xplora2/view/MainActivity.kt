@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,6 +17,7 @@ import com.example.xplora2.controller.ApiClient
 import com.example.xplora2.model.Lugar
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
@@ -62,18 +62,19 @@ class MainActivity : AppCompatActivity() {
         })
 
         // Botón Agregar Lugar
-        val btnAgregarLugar = findViewById<Button>(R.id.btnAgregarLugar)
-        btnAgregarLugar.setOnClickListener {
+        val fabAgregarLugar = findViewById<FloatingActionButton>(R.id.fabAgregarLugar)
+        fabAgregarLugar.setOnClickListener {
             val intent = Intent(this, AgregarLugarActivity::class.java)
             startActivity(intent)
         }
 
         // Botón Cerrar Sesión
-        val btnCerrarSesion = findViewById<Button>(R.id.btnCerrarSesion)
-        btnCerrarSesion.setOnClickListener {
+        val fabCerrarSesion = findViewById<FloatingActionButton>(R.id.fabCerrarSesion)
+        fabCerrarSesion.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
 
-            val googleSignInClient = GoogleSignIn.getClient(this,
+            val googleSignInClient = GoogleSignIn.getClient(
+                this,
                 GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.default_web_client_id))
                     .requestEmail()
@@ -87,7 +88,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Launcher para detalles
+        // Launcher para volver de DetalleActivity
         detalleLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val huboCambios = result.data?.getBooleanExtra("HUBO_CAMBIOS", false) ?: false

@@ -1,47 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="24dp"
-    android:gravity="center"
-    android:background="@android:color/white">
+    android:gravity="center_horizontal" android:background="@android:color/white">
 
-    <EditText
+    <ImageView
+        android:id="@+id/ivPortada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp" android:src="@drawable/portada"
+        android:scaleType="fitCenter" android:adjustViewBounds="true" android:contentDescription="@string/descripcion_portada" /> <com.google.android.material.textfield.TextInputLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:hint="Correo electrónico">
+
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Correo electrónico"
         android:inputType="textEmailAddress"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp" />
+        android:padding="12dp" />
 
-    <EditText
-        android:id="@+id/etPassword"
+</com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
         android:hint="Contraseña"
-        android:inputType="textPassword"
-        android:padding="12dp"
-        android:layout_marginBottom="24dp" />
+        app:endIconMode="password_toggle">
 
-    <Button
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:padding="12dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="Iniciar sesión con correo"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/colorSecondary"
+        android:textColor="@color/white"
+        />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnGoogleLogin"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text="Iniciar sesión con Google" />
-    <Button
+        android:text="Iniciar sesión con Google"
+        app:icon="@drawable/ic_google"
+        app:iconGravity="start"
+        android:insetLeft="0dp"
+        android:insetRight="0dp"
+        android:backgroundTint="@color/colorSecondary"
+        android:textColor="@color/white" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnIrARegistro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Crear cuenta nueva" />
+        android:layout_marginBottom="16dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:text="Crear cuenta nueva"
+        android:textColor="#D36D6D6D"/>
 
 </LinearLayout>

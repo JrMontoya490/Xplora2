@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">Xplora2</string>
     <string name="default_web_client_id">952903461731-3g916rd34r3g5luolr82c91f6mqo7fag.apps.googleusercontent.com</string>
+    <string name="descripcion_portada">Portada Xplora</string>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="colorSecondary">#018786</color>
+    <color name="textColorSecondary">#DE000000</color>
 
 </resources>

@@ -129,6 +129,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Guardar"
+            android:backgroundTint="#0028FF"
+            android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@id/longitudEditText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

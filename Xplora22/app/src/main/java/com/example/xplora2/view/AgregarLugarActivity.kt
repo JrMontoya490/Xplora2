@@ -17,8 +17,9 @@ class AgregarLugarActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_agregar_lugar)
+        setContentView(R.layout.activity_agregar_lugar) // Asigna el layout XML a esta actividad
 
+        // campos de entrada del formulario
         val nombreEditText = findViewById<EditText>(R.id.nombreLugarEditText)
         val paisEditText = findViewById<EditText>(R.id.paisLugarEditText)
         val ciudadEditText = findViewById<EditText>(R.id.ciudadLugarEditText)
@@ -32,7 +33,10 @@ class AgregarLugarActivity : AppCompatActivity() {
         val longitudEditText = findViewById<EditText>(R.id.longitudEditText)
         val btnGuardar = findViewById<Button>(R.id.btnGuardarLugar)
 
+        // Acciones al hacer clic en el botón "Guardar"
         btnGuardar.setOnClickListener {
+
+            // valores ingresados por el usuario
             val nombre = nombreEditText.text.toString()
             val pais = paisEditText.text.toString()
             val ciudad = ciudadEditText.text.toString()
@@ -45,6 +49,7 @@ class AgregarLugarActivity : AppCompatActivity() {
             val latitud = latitudEditText.text.toString().toDoubleOrNull()
             val longitud = longitudEditText.text.toString().toDoubleOrNull()
 
+            // Verifica que todos los campos estén completos y correctos
             if (nombre.isBlank() || pais.isBlank() || ciudad.isBlank() || descripcion.isBlank() ||
                 imagenUrl.isBlank() || fechaFundacion.isBlank() || tipoLugar.isBlank() ||
                 idiomas.isEmpty() || etiquetas.isEmpty() || latitud == null || longitud == null
@@ -53,6 +58,7 @@ class AgregarLugarActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Crea un objeto Lugar con los datos ingresados
             val lugar = Lugar(
                 nombre = nombre,
                 descripcion = descripcion,
@@ -66,12 +72,12 @@ class AgregarLugarActivity : AppCompatActivity() {
                 coordenadas = Coordenadas(latitud, longitud)
             )
 
-            // Enviar el lugar al backend
+            // Llama a la API para agregar el lugar a la base de datros
             ApiClient.lugarApiService.agregarLugar(lugar).enqueue(object : Callback<Lugar> {
                 override fun onResponse(call: Call<Lugar>, response: Response<Lugar>) {
                     if (response.isSuccessful) {
                         Toast.makeText(this@AgregarLugarActivity, "Lugar agregado exitosamente", Toast.LENGTH_SHORT).show()
-                        finish() // Cierra la actividad
+                        finish() 
                     } else {
                         Toast.makeText(this@AgregarLugarActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
                     }

@@ -23,12 +23,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var detalleLauncher: ActivityResultLauncher<Intent>
+
     private lateinit var recyclerView: RecyclerView
-    private lateinit var lugarAdapter: LugarAdapter
     private lateinit var searchView: SearchView
+    private lateinit var lugarAdapter: LugarAdapter
     private val lugares = mutableListOf<Lugar>()
     private val lugaresFiltrados = mutableListOf<Lugar>()
 
@@ -36,15 +38,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Configurar el RecyclerView
         recyclerView = findViewById(R.id.rvLugares)
         searchView = findViewById(R.id.searchView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Configurar adaptador
         lugarAdapter = LugarAdapter(lugaresFiltrados) { lugar ->
             if (lugar._id.isNotEmpty()) {
-                val intent = Intent(this@MainActivity, DetalleActivity::class.java)
-                intent.putExtra("LUGAR_ID", lugar._id)
+                val intent = Intent(this, DetalleActivity::class.java).apply {
+                    putExtra("LUGAR_ID", lugar._id)
+                }
                 detalleLauncher.launch(intent)
             } else {
                 Toast.makeText(this, "ID del lugar no disponible", Toast.LENGTH_SHORT).show()
@@ -52,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         }
         recyclerView.adapter = lugarAdapter
 
-        // Buscador
+        // Listener del SearchView para filtrar en tiempo real
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = false
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -61,46 +64,26 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        // Botón Agregar Lugar
-        val fabAgregarLugar = findViewById<FloatingActionButton>(R.id.fabAgregarLugar)
-        fabAgregarLugar.setOnClickListener {
-            val intent = Intent(this, AgregarLugarActivity::class.java)
-            startActivity(intent)
+        findViewById<FloatingActionButton>(R.id.fabAgregarLugar).setOnClickListener {
+            startActivity(Intent(this, AgregarLugarActivity::class.java))
         }
 
-        // Botón Cerrar Sesión
-        val fabCerrarSesion = findViewById<FloatingActionButton>(R.id.fabCerrarSesion)
-        fabCerrarSesion.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-
-            val googleSignInClient = GoogleSignIn.getClient(
-                this,
-                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id))
-                    .requestEmail()
-                    .build()
-            )
-            googleSignInClient.signOut().addOnCompleteListener {
-                val intent = Intent(this, LoginActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
-            }
+        findViewById<FloatingActionButton>(R.id.fabCerrarSesion).setOnClickListener {
+            cerrarSesion()
         }
 
-        // Launcher para volver de DetalleActivity
+        // Registrar launcher para recibir resultados desde DetalleActivity
         detalleLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val huboCambios = result.data?.getBooleanExtra("HUBO_CAMBIOS", false) ?: false
-                if (huboCambios) {
-                    cargarLugaresDesdeAPI()
-                }
+                if (huboCambios) cargarLugaresDesdeAPI()
             }
         }
 
         cargarLugaresDesdeAPI()
     }
 
+    //Llama a la API y carga la lista de lugares
     private fun cargarLugaresDesdeAPI() {
         ApiClient.lugarApiService.getLugares().enqueue(object : Callback<List<Lugar>> {
             override fun onResponse(call: Call<List<Lugar>>, response: Response<List<Lugar>>) {
@@ -109,11 +92,9 @@ class MainActivity : AppCompatActivity() {
                         lugares.clear()
                         lugares.addAll(lugaresApi)
                         filtrarLugares("")
-                    } ?: run {
-                        Log.w("MainActivity", "Respuesta vacía.")
-                    }
+                    } ?: Log.w("MainActivity", "Respuesta vacía.")
                 } else {
-                    Log.e("MainActivity", "Error en la respuesta. Código: ${response.code()}")
+                    Log.e("MainActivity", "Error en respuesta: ${response.code()}")
                 }
             }
 
@@ -123,6 +104,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+    //Filtra la lista según el texto introducido en el SearchView.
 
     private fun filtrarLugares(texto: String?) {
         lugaresFiltrados.clear()
@@ -139,5 +122,27 @@ class MainActivity : AppCompatActivity() {
             )
         }
         lugarAdapter.notifyDataSetChanged()
+    }
+
+    //Cierra la sesión de Firebase y Google
+
+    private fun cerrarSesion() {
+        FirebaseAuth.getInstance().signOut()
+
+        val googleSignInClient = GoogleSignIn.getClient(
+            this,
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+        )
+        googleSignInClient.signOut().addOnCompleteListener {
+
+            val intent = Intent(this, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(intent)
+            finish()
+        }
     }
 }

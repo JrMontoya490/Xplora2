@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.xplora2.R
 import com.google.firebase.auth.FirebaseAuth
 
+
 class RegisterActivity : AppCompatActivity() {
 
+    // Instancia de FirebaseAuth para gestionar la autenticación
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +27,10 @@ class RegisterActivity : AppCompatActivity() {
             val email = emailInput.text.toString().trim()
             val password = passwordInput.text.toString().trim()
 
+            // Validar campos
             if (email.isNotEmpty() && password.length >= 6) {
+
+                // Intenta registrar el usuario en Firebase
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
@@ -37,7 +42,11 @@ class RegisterActivity : AppCompatActivity() {
                         }
                     }
             } else {
-                Toast.makeText(this, "Correo y contraseña (mín. 6 caracteres)", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Correo y contraseña (mín. 6 caracteres)",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

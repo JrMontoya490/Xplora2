@@ -38,12 +38,14 @@ class EditarLugarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editar_lugar)
 
+        // Obtener ID del lugar desde el intent
         lugarId = intent.getStringExtra("LUGAR_ID") ?: run {
             Toast.makeText(this, "ID del lugar no recibido", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
 
+        // Inicializar vistas
         nombreEditText = findViewById(R.id.nombreLugarEditText)
         paisEditText = findViewById(R.id.paisLugarEditText)
         ciudadEditText = findViewById(R.id.ciudadLugarEditText)
@@ -61,6 +63,7 @@ class EditarLugarActivity : AppCompatActivity() {
 
         cargarLugar()
 
+        // Botón para actualizar lugar
         btnActualizar.setOnClickListener {
             val lugarActualizado = Lugar(
                 _id = lugarId,
@@ -79,6 +82,7 @@ class EditarLugarActivity : AppCompatActivity() {
                 )
             )
 
+            // Llamada a la API para actualizar
             ApiClient.lugarApiService.updateLugar(lugarId, lugarActualizado)
                 .enqueue(object : Callback<Lugar> {
                     override fun onResponse(call: Call<Lugar>, response: Response<Lugar>) {
@@ -117,6 +121,7 @@ class EditarLugarActivity : AppCompatActivity() {
         }
     }
 
+    // Llamada para obtener datos actuales del lugar
     private fun cargarLugar() {
         ApiClient.lugarApiService.obtenerLugarPorId(lugarId)
             .enqueue(object : Callback<Lugar> {

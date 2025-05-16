@@ -21,11 +21,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class DetalleActivity : AppCompatActivity() {
+
 
     private lateinit var lugarId: String
     private val api = ApiClient.lugarApiService
 
+    // Vistas de la interfaz
     private lateinit var nombreTextView: TextView
     private lateinit var descripcionTextView: TextView
     private lateinit var infoExtraTextView: TextView
@@ -37,6 +40,7 @@ class DetalleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detalle)
 
+        // Obtiene el ID del lugar
         lugarId = intent.getStringExtra("LUGAR_ID") ?: ""
         if (lugarId.isEmpty()) {
             Toast.makeText(this, "ID del lugar no recibido", Toast.LENGTH_LONG).show()
@@ -58,14 +62,17 @@ class DetalleActivity : AppCompatActivity() {
         }
     }
 
+
     private fun initViews() {
-        nombreTextView = findViewById(R.id.nombreLugar)
+        nombreTextView     = findViewById(R.id.nombreLugar)
         descripcionTextView = findViewById(R.id.descripcionLugar)
-        infoExtraTextView = findViewById(R.id.infoExtra)
-        imagenImageView = findViewById(R.id.imagenLugar)
-        btnEditar = findViewById(R.id.btnEditarDetalle)
-        btnEliminar = findViewById(R.id.btnEliminarDetalle)
+        infoExtraTextView  = findViewById(R.id.infoExtra)
+        imagenImageView    = findViewById(R.id.imagenLugar)
+        btnEditar          = findViewById(R.id.btnEditarDetalle)
+        btnEliminar        = findViewById(R.id.btnEliminarDetalle)
     }
+
+    //Realiza la llamada GET para traer el lugar desde la API
 
     private fun cargarLugar() {
         api.obtenerLugarPorId(lugarId).enqueue(object : Callback<Lugar> {
@@ -86,9 +93,12 @@ class DetalleActivity : AppCompatActivity() {
         })
     }
 
+
     private fun mostrarLugar(lugar: Lugar) {
         nombreTextView.text = lugar.nombre
         descripcionTextView.text = lugar.descripcion
+
+
         infoExtraTextView.text = """
             País: ${lugar.pais}
             Ciudad: ${lugar.ciudad}
@@ -98,8 +108,10 @@ class DetalleActivity : AppCompatActivity() {
             Etiquetas: ${lugar.etiquetas.joinToString(", ")}
         """.trimIndent()
 
+
         Glide.with(this).load(lugar.imagen_url).into(imagenImageView)
 
+        // Configura el mapa y coloca un marcador
         val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync { googleMap ->
             val ubicacion = LatLng(lugar.coordenadas.latitud, lugar.coordenadas.longitud)
@@ -137,7 +149,8 @@ class DetalleActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 101 && resultCode == RESULT_OK && data?.getBooleanExtra("HUBO_CAMBIOS", false) == true) {
+        if (requestCode == 101 && resultCode == RESULT_OK &&
+            data?.getBooleanExtra("HUBO_CAMBIOS", false) == true) {
             setResult(RESULT_OK, Intent().putExtra("HUBO_CAMBIOS", true))
             finish()
         }

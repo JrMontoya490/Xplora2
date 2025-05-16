@@ -16,15 +16,14 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val RC_SIGN_IN = 9001
+    private val RC_SIGN_IN = 9001 // Código de solicitud para Google Sign-In
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Inicializa FirebaseAuth antes de usarlo
         auth = FirebaseAuth.getInstance()
 
-        // Si ya hay usuario logueado, ir directamente al MainActivity
+        // Si el usuario ya está autenticado, ir directamente a la pantalla principal
         if (auth.currentUser != null) {
             irAMain()
             return
@@ -32,13 +31,14 @@ class LoginActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_login)
 
-        // Configurar Google Sign-In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 
+        // Inicializar el cliente de Google Sign-In con las opciones configuradas
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
 
         val emailInput = findViewById<EditText>(R.id.etEmail)
         val passwordInput = findViewById<EditText>(R.id.etPassword)
@@ -50,6 +50,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
+        // Botón para iniciar sesión con correo y contraseña
         loginButton.setOnClickListener {
             val email = emailInput.text.toString()
             val password = passwordInput.text.toString()
@@ -74,6 +75,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    // Método que recibe el resultado del intento de inicio de sesión con Google
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -88,6 +90,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    // Autenticación con Firebase usando las credenciales de la cuenta de Google
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount?) {
         val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
@@ -99,6 +102,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    // Función para cambiar a la pantalla principal y cerrar esta actividad
     private fun irAMain() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()

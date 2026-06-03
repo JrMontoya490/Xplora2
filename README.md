@@ -7,3 +7,5 @@ Mockups : https://www.figma.com/design/VXbKUO3ALfkCoRQJbee4Be/Mockups-Proyecto?n
 José Rodrigo Montoya Martinez MM181797
 
 Api: https://github.com/JrMontoya490/XploraApi.git
+
+![](https://github.com/JrMontoya490/Xplora2/blob/main/Xplora22/app/src/main/res/drawable/portada.png)
